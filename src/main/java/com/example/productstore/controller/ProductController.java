@@ -113,6 +113,7 @@ public class ProductController {
 
 
 
+
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponse>> searchProducts(@RequestParam String name) {
         List<Product> products = productService.searchProductsByName(name);
@@ -122,9 +123,6 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-
-
-
     @GetMapping("/by-category-id/{categoryId}")
     public ResponseEntity<List<ProductResponse>> getProductsByCategoryId(@PathVariable Long categoryId) {
         List<Product> products = productService.getProductsByCategoryId(categoryId);
@@ -133,7 +131,6 @@ public class ProductController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("/sorted-by-price")
     public List<ProductResponse> getProductsSortedByPrice(@RequestParam("order") String order) {
@@ -146,8 +143,6 @@ public class ProductController {
 
     }
 
-
-
     @GetMapping("/top-expensive")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public  List<ProductResponse> getTopExpensiveProducts(@RequestParam(defaultValue = "5") int limit) {
@@ -159,5 +154,4 @@ public class ProductController {
         return response;
 
     }
-
     }
