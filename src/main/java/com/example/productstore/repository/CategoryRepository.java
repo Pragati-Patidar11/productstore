@@ -1,6 +1,7 @@
 package com.example.productstore.repository;
 
 import com.example.productstore.model.Category;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,7 +13,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByName(String name);
 
     List<Category> findByNameContainingIgnoreCase(String name);
-    Optional<Category> findById(Long Id);
+
+    @EntityGraph(attributePaths = "products")
+    Optional<Category> findById(Long id);
 
 }
 

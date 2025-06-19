@@ -2,6 +2,7 @@ package com.example.productstore.service;
 
 import com.example.productstore.dto.CategoryRequest;
 import com.example.productstore.dto.CategoryResponse;
+import com.example.productstore.dto.ProductResponse;
 import com.example.productstore.exception.ResourceNotFoundException;
 import com.example.productstore.model.Category;
 import com.example.productstore.model.Product;
@@ -57,6 +58,8 @@ public class CategoryService {
     }
 
 
+
+
     public CategoryResponse getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
@@ -66,6 +69,9 @@ public class CategoryService {
         response.setName(category.getName());
         return response;
     }
+
+
+
 
 
     public List<CategoryResponse> searchCategoriesByName(String name) {

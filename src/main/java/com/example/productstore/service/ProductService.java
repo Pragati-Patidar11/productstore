@@ -7,7 +7,9 @@ import com.example.productstore.model.Product;
 import com.example.productstore.repository.CategoryRepository;
 import com.example.productstore.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +57,16 @@ public class ProductService {
     }
 
 
+    public Page<ProductResponse> getPaginatedProducts(int page, int size, String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+
+        return productPage.map(ProductResponse::new);
+    }
+
+
+
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
@@ -70,6 +82,14 @@ public class ProductService {
     public List<Product> getProductsByPriceGreaterThan(double price) {
         return productRepository.findByPriceGreaterThan(price);
     }
+
+    public Page<ProductResponse> getProductsByMinPricePaginated(double minPrice, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByPriceGreaterThanEqual(minPrice, pageable)
+                .map(ProductResponse::new);
+    }
+
+
 
     public Optional<Product> updateProduct(Long id, ProductRequest request) {
         return productRepository.findById(id).map(existingProduct -> {
@@ -91,8 +111,21 @@ public class ProductService {
         return productRepository.findByCategory_NameIgnoreCase(category);
     }
 
+    public Page<ProductResponse> getProductsByCategoryNamePaginated(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByCategory_Name(category, pageable)
+                .map(ProductResponse::new);
+    }
+
+
     public List<Product> searchProductsByName(String name) {
         return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public Page<ProductResponse> searchProductsByNamePaginated(String name, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByNameContainingIgnoreCase(name, pageable)
+                .map(ProductResponse::new);
     }
 
     public List<Product> getProductsByCategoryId(Long categoryId) {
@@ -100,11 +133,25 @@ public class ProductService {
     }
 
 
+    public Page<ProductResponse> getProductsByCategoryIdPaginated(Long categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByCategory_Id(categoryId, pageable)
+                .map(ProductResponse::new);
+    }
+
+
+
     public List<Product> getProductsSortedByPrice(String order) {
         Sort sort = order.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
         return productRepository.findAll(sort);
     }
 
+    public List<ProductResponse> getAllProductsSorted(String sortBy) {
+        List<Product> sortedProducts = productRepository.findAll(Sort.by(sortBy));
+        return sortedProducts.stream()
+                .map(ProductResponse::new)
+                .collect(Collectors.toList());
+    }
 
 
     public List<Product> getTopExpensiveProducts(int limit) {
