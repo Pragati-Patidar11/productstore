@@ -6,6 +6,8 @@ import com.example.productstore.model.Category;
 import com.example.productstore.model.Product;
 import com.example.productstore.repository.CategoryRepository;
 import com.example.productstore.repository.ProductRepository;
+import jakarta.transaction.Transactional;
+import org.hibernate.query.sqm.mutation.internal.temptable.LocalTemporaryTableInsertStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +29,7 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
 
-
+    @Transactional
     public ProductResponse saveProduct(ProductRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found with ID: " + request.getCategoryId()));
@@ -41,9 +43,16 @@ public class ProductService {
         product.setReleaseDate(request.getReleaseDate());
         product.setCategory(category);
 
+
+
+        if (product.getPrice() <= 0) {
+            throw new IllegalArgumentException("Product price must be greater than zero");
+        }
+
         Product saved = productRepository.save(product);
 
         return new ProductResponse(saved);
+
     }
 
 
@@ -105,8 +114,6 @@ public class ProductService {
         });
     }
 
-
-
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory_NameIgnoreCase(category);
     }
@@ -128,6 +135,8 @@ public class ProductService {
                 .map(ProductResponse::new);
     }
 
+
+
     public List<Product> getProductsByCategoryId(Long categoryId) {
         return productRepository.findByCategoryId(categoryId);
     }
@@ -138,7 +147,6 @@ public class ProductService {
         return productRepository.findByCategory_Id(categoryId, pageable)
                 .map(ProductResponse::new);
     }
-
 
 
     public List<Product> getProductsSortedByPrice(String order) {
@@ -155,8 +163,9 @@ public class ProductService {
 
 
     public List<Product> getTopExpensiveProducts(int limit) {
-        return productRepository.findTopNExpensiveProducts(PageRequest.of(0, limit, Sort.by("price").descending()));
+        return productRepository.findAllByOrderByPriceDesc(PageRequest.of(0, limit, Sort.by("price").descending()));
     }
+
 
 
 }

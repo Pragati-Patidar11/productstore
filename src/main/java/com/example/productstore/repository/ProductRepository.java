@@ -10,28 +10,24 @@ import java.util.List;
 @Repository
     public interface ProductRepository extends JpaRepository<Product, Long> {
 
-        List<Product> findByPriceGreaterThan(double price);
+    List<Product> findByPriceGreaterThan(double price);
 
     Page<Product> findByPriceGreaterThanEqual(double price, Pageable pageable);
 
-        List<Product> findByCategory_NameIgnoreCase(String categoryName);
+    List<Product> findByCategory_NameIgnoreCase(String categoryName);
 
     Page<Product> findByCategory_Name(String name, Pageable pageable);
 
-     List<Product> findByNameContainingIgnoreCase(String name);
+    List<Product> findByNameContainingIgnoreCase(String name);
 
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     List<Product> findByCategoryId(Long categoryId);
 
-
     Page<Product> findByCategory_Id(Long id, Pageable pageable);
 
     List<Product> findAllByOrderByPriceDesc(Pageable pageable);
 
-    default List<Product> findTopNExpensiveProducts(Pageable pageable) {
-        return findAllByOrderByPriceDesc(pageable);
-    }
 
 }
 

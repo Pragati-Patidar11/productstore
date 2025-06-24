@@ -26,6 +26,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
+
     public void setEmail(String email) {
         this.email = email;
     }

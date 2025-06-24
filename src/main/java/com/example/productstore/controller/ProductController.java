@@ -8,6 +8,7 @@ import com.example.productstore.repository.ProductRepository;
 import com.example.productstore.service.ProductService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -122,6 +123,7 @@ public class ProductController {
     }
 
 
+
     @GetMapping("/category")
     public ResponseEntity<List<ProductResponse>> getProductsByCategory(@RequestParam String category) {
         List<Product> products = productService.getProductsByCategory(category);
@@ -156,6 +158,7 @@ public class ProductController {
     }
 
 
+
         @GetMapping("/by-category-id/{categoryId}")
         public ResponseEntity<List<ProductResponse>> getProductsByCategoryId (@PathVariable Long categoryId){
             List<Product> products = productService.getProductsByCategoryId(categoryId);
@@ -171,13 +174,13 @@ public class ProductController {
             return ResponseEntity.ok(response);
         }
 
+
     @GetMapping("/by-category-id-paginated/{id}")
     public Page<ProductResponse> getProductsByCategoryId(@PathVariable Long id,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size) {
         return productService.getProductsByCategoryIdPaginated(id, page, size);
     }
-
 
 
         @GetMapping("/sorted-by-price")

@@ -8,6 +8,7 @@ import com.example.productstore.enums.Role;
 import com.example.productstore.repository.UserRepository;
 import com.example.productstore.security.JwtUtil;
 import com.example.productstore.service.CustomUserDetailsService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,6 +62,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
+    @Transactional
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -82,7 +84,14 @@ public class AuthController {
         System.out.println("Registering user with roles: " + user.getRoles());
 
         userRepository.save(user);
+
+        if (true) {
+            throw new RuntimeException("Simulated failure after saving user");
+        }
+
         return ResponseEntity.ok("User registered successfully");
+
+
     }
 }
 

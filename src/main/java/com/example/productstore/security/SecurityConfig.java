@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
 
                 .requestMatchers(HttpMethod.GET, "/api/products/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/actuator", "/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
