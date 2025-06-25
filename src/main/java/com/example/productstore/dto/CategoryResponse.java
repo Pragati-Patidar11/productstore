@@ -2,12 +2,13 @@ package com.example.productstore.dto;
 
 import com.example.productstore.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryResponse {
     private Long id;
     private String name;
-    private List<ProductResponse> products;
+    private List<ProductResponse> products = new ArrayList<>();
 
     public CategoryResponse() {
     }

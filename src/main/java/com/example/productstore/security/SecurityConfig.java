@@ -32,6 +32,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
+                .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
+
                 .requestMatchers("/api/auth/**").permitAll()
 
                 .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")

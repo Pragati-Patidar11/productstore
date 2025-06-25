@@ -14,6 +14,8 @@ public class ProductResponse {
     private LocalDate releaseDate;
     private String categoryName;
 
+    public ProductResponse() {
+    }
 
     public ProductResponse(Product product) {
         this.id = product.getId();

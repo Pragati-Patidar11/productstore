@@ -27,6 +27,9 @@ public class ProductRequest {
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 
+    public ProductRequest() {
+    }
+
     public Long getCategoryId() {
         return categoryId;
     }
