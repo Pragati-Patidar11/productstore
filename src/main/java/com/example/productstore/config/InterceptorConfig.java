@@ -36,5 +36,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/products/**", "/api/categories/**");
 
         registry.addInterceptor(executionTimeInterceptor).addPathPatterns("/api/**");
+
+
     }
 }

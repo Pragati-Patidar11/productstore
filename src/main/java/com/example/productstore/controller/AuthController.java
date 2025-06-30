@@ -73,6 +73,7 @@ public class AuthController {
         user.setEmail(request.getEmail());
         user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
 
+
         Set<Role> roles = new HashSet<>();
 
         if (request.getRole().equalsIgnoreCase("ADMIN")) {
